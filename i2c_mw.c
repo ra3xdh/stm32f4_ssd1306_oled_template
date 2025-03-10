@@ -32,7 +32,7 @@ void i2c_setup(void)
 }
 
 
-int i2c_reg_write(uint32_t hi2c,const uint8_t addr, const uint8_t reg, uint8_t *buf,const uint8_t nbytes)
+int i2c_reg_write(uint32_t hi2c,const uint8_t addr, uint8_t reg, uint8_t *buf,const uint8_t nbytes)
 {
 	//int num_bytes_read = 0;
 	uint8_t msg[nbytes + 1];
@@ -55,7 +55,7 @@ int i2c_reg_write(uint32_t hi2c,const uint8_t addr, const uint8_t reg, uint8_t *
 }
 
 
-int i2c_reg_read(uint32_t hi2c,const uint8_t addr,const uint8_t reg,uint8_t *buf,const uint8_t nbytes)
+int i2c_reg_read(uint32_t hi2c,const uint8_t addr, uint8_t reg,uint8_t *buf,const uint8_t nbytes)
 {
 	//int num_bytes_read = 0;
 
