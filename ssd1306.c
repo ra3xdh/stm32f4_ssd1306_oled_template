@@ -19,9 +19,9 @@ static SSD1306_t SSD1306;
 //
 //  Send a byte to the command register
 //
-static int ssd1306_WriteCommand(uint32_t hi2c, uint8_t command)
+static int ssd1306_WriteCommand(uint8_t command)
 {
-  int status = i2c_reg_write(hi2c,SSD1306_I2C_ADDR,0x00,&command,1);
+  int status = i2c_reg_write(SSD1306_I2C_IFACE,SSD1306_I2C_ADDR,0x00,&command,1);
   return status;
 }
 
@@ -29,50 +29,50 @@ static int ssd1306_WriteCommand(uint32_t hi2c, uint8_t command)
 //
 //  Initialize the oled screen
 //
-uint8_t ssd1306_Init(uint32_t hi2c)
+uint8_t ssd1306_Init(void)
 {
-    i2c_setup(hi2c);
+    i2c_setup();
     // Wait for the screen to boot
     delay_cycles(500000);
     int status = 0;
 
     // Init LCD
-    status += ssd1306_WriteCommand(hi2c, 0xAE);   // Display off
-    status += ssd1306_WriteCommand(hi2c, 0x20);   // Set Memory Addressing Mode
-    status += ssd1306_WriteCommand(hi2c, 0x10);   // 00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
-    status += ssd1306_WriteCommand(hi2c, 0xB0);   // Set Page Start Address for Page Addressing Mode,0-7
-    status += ssd1306_WriteCommand(hi2c, 0xC8);   // Set COM Output Scan Direction
-    status += ssd1306_WriteCommand(hi2c, 0x00);   // Set low column address
-    status += ssd1306_WriteCommand(hi2c, 0x10);   // Set high column address
-    status += ssd1306_WriteCommand(hi2c, 0x40);   // Set start line address
-    status += ssd1306_WriteCommand(hi2c, 0x81);   // set contrast control register
-    status += ssd1306_WriteCommand(hi2c, 0xFF);
-    status += ssd1306_WriteCommand(hi2c, 0xA1);   // Set segment re-map 0 to 127
-    status += ssd1306_WriteCommand(hi2c, 0xA6);   // Set normal display
+    status += ssd1306_WriteCommand(0xAE);   // Display off
+    status += ssd1306_WriteCommand(0x20);   // Set Memory Addressing Mode
+    status += ssd1306_WriteCommand(0x10);   // 00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+    status += ssd1306_WriteCommand(0xB0);   // Set Page Start Address for Page Addressing Mode,0-7
+    status += ssd1306_WriteCommand(0xC8);   // Set COM Output Scan Direction
+    status += ssd1306_WriteCommand(0x00);   // Set low column address
+    status += ssd1306_WriteCommand(0x10);   // Set high column address
+    status += ssd1306_WriteCommand(0x40);   // Set start line address
+    status += ssd1306_WriteCommand(0x81);   // set contrast control register
+    status += ssd1306_WriteCommand(0xFF);
+    status += ssd1306_WriteCommand(0xA1);   // Set segment re-map 0 to 127
+    status += ssd1306_WriteCommand(0xA6);   // Set normal display
 
-    status += ssd1306_WriteCommand(hi2c, 0xA8);   // Set multiplex ratio(1 to 64)
-    status += ssd1306_WriteCommand(hi2c, SSD1306_HEIGHT - 1);
+    status += ssd1306_WriteCommand( 0xA8);   // Set multiplex ratio(1 to 64)
+    status += ssd1306_WriteCommand(SSD1306_HEIGHT - 1);
 
-    status += ssd1306_WriteCommand(hi2c, 0xA4);   // 0xa4,Output follows RAM content;0xa5,Output ignores RAM content
-    status += ssd1306_WriteCommand(hi2c, 0xD3);   // Set display offset
-    status += ssd1306_WriteCommand(hi2c, 0x00);   // No offset
-    status += ssd1306_WriteCommand(hi2c, 0xD5);   // Set display clock divide ratio/oscillator frequency
-    status += ssd1306_WriteCommand(hi2c, 0xF0);   // Set divide ratio
-    status += ssd1306_WriteCommand(hi2c, 0xD9);   // Set pre-charge period
-    status += ssd1306_WriteCommand(hi2c, 0x22);
+    status += ssd1306_WriteCommand(0xA4);   // 0xa4,Output follows RAM content;0xa5,Output ignores RAM content
+    status += ssd1306_WriteCommand(0xD3);   // Set display offset
+    status += ssd1306_WriteCommand(0x00);   // No offset
+    status += ssd1306_WriteCommand(0xD5);   // Set display clock divide ratio/oscillator frequency
+    status += ssd1306_WriteCommand(0xF0);   // Set divide ratio
+    status += ssd1306_WriteCommand(0xD9);   // Set pre-charge period
+    status += ssd1306_WriteCommand(0x22);
 
-    status += ssd1306_WriteCommand(hi2c, 0xDA);   // Set com pins hardware configuration
+    status += ssd1306_WriteCommand(0xDA);   // Set com pins hardware configuration
 #ifdef SSD1306_COM_LR_REMAP
-    status += ssd1306_WriteCommand(hi2c, 0x32);   // Enable COM left/right remap
+    status += ssd1306_WriteCommand(0x32);   // Enable COM left/right remap
 #else
-    status += ssd1306_WriteCommand(hi2c, 0x12);   // Do not use COM left/right remap
+    status += ssd1306_WriteCommand(0x12);   // Do not use COM left/right remap
 #endif // SSD1306_COM_LR_REMAP
 
-    status += ssd1306_WriteCommand(hi2c, 0xDB);   // Set vcomh
-    status += ssd1306_WriteCommand(hi2c, 0x20);   // 0x20,0.77xVcc
-    status += ssd1306_WriteCommand(hi2c, 0x8D);   // Set DC-DC enable
-    status += ssd1306_WriteCommand(hi2c, 0x14);   //
-    status += ssd1306_WriteCommand(hi2c, 0xAF);   // Turn on SSD1306 panel
+    status += ssd1306_WriteCommand(0xDB);   // Set vcomh
+    status += ssd1306_WriteCommand(0x20);   // 0x20,0.77xVcc
+    status += ssd1306_WriteCommand(0x8D);   // Set DC-DC enable
+    status += ssd1306_WriteCommand(0x14);   //
+    status += ssd1306_WriteCommand(0xAF);   // Turn on SSD1306 panel
 
     if (status != 0) {
         return 1;
@@ -82,7 +82,7 @@ uint8_t ssd1306_Init(uint32_t hi2c)
     ssd1306_Fill(Black);
 
     // Flush buffer to screen
-    ssd1306_UpdateScreen(hi2c);
+    ssd1306_UpdateScreen();
 
     // Set default values for screen object
     SSD1306.CurrentX = 0;
@@ -110,14 +110,14 @@ void ssd1306_Fill(SSD1306_COLOR color)
 //
 //  Write the screenbuffer with changed to the screen
 //
-void ssd1306_UpdateScreen(uint32_t hi2c)
+void ssd1306_UpdateScreen(void)
 {
     uint8_t i;
 
     for (i = 0; i < 8; i++) {
-        ssd1306_WriteCommand(hi2c, 0xB0 + i);
-        ssd1306_WriteCommand(hi2c, 0x00);
-        ssd1306_WriteCommand(hi2c, 0x10);
+        ssd1306_WriteCommand(0xB0 + i);
+        ssd1306_WriteCommand(0x00);
+        ssd1306_WriteCommand(0x10);
 
         //STM32 HAL Mem write params
   // (I2C_HandleTypeDef *hi2c,
@@ -129,7 +129,7 @@ void ssd1306_UpdateScreen(uint32_t hi2c)
 	// 								uint32_t Timeout);
 
         // HAL_I2C_Mem_Write(hi2c, SSD1306_I2C_ADDR, 0x40, 1, &SSD1306_Buffer[SSD1306_WIDTH * i], SSD1306_WIDTH, 100);
-        i2c_reg_write(hi2c,SSD1306_I2C_ADDR,0x40,&SSD1306_Buffer[SSD1306_WIDTH * i],SSD1306_WIDTH);
+        i2c_reg_write(SSD1306_I2C_IFACE,SSD1306_I2C_ADDR,0x40,&SSD1306_Buffer[SSD1306_WIDTH * i],SSD1306_WIDTH);
     }
 }
 
@@ -445,13 +445,13 @@ void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8
     return;
 }
 
-void ssd1306_SetContrast(uint32_t hi2c,const uint8_t value) {
+void ssd1306_SetContrast(const uint8_t value) {
     const uint8_t kSetContrastControlRegister = 0x81;
-    ssd1306_WriteCommand(hi2c,kSetContrastControlRegister);
-    ssd1306_WriteCommand(hi2c,value);
+    ssd1306_WriteCommand(kSetContrastControlRegister);
+    ssd1306_WriteCommand(value);
 }
 
-void ssd1306_SetDisplayOn(uint32_t hi2c,const uint8_t on) {
+void ssd1306_SetDisplayOn(const uint8_t on) {
     uint8_t value;
     if (on) {
         value = 0xAF;   // Display on
@@ -460,7 +460,7 @@ void ssd1306_SetDisplayOn(uint32_t hi2c,const uint8_t on) {
         value = 0xAE;   // Display off
         SSD1306.DisplayOn = 0;
     }
-    ssd1306_WriteCommand(hi2c,value);
+    ssd1306_WriteCommand(value);
 }
 
 uint8_t ssd1306_GetDisplayOn(void) {

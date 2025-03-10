@@ -23,6 +23,7 @@
 #include <libopencm3/stm32/i2c.h>
 #include "ssd1306.h"
 #include "fonts.h"
+#include "delay.h"
 
 static void gpio_setup(void)
 {
@@ -32,24 +33,21 @@ static void gpio_setup(void)
 
 int main(void)
 {
-	int i;
 
 	gpio_setup();
 
-	ssd1306_Init(I2C1);
+	ssd1306_Init();
 	ssd1306_Fill(Black);
-	ssd1306_SetCursor(10,30);
+	ssd1306_SetCursor(10,45);
 	ssd1306_WriteString("Test",Font_11x18,White);
-	ssd1306_DrawCircle(64,32,10,White);
-	ssd1306_UpdateScreen(I2C1);
+	ssd1306_DrawCircle(64,32,15,White);
+	ssd1306_UpdateScreen();
 
 	/* Blink the LED (PC8) on the board. */
 	while (1) {
 		/* Using API function gpio_toggle(): */
 		gpio_toggle(GPIOD, GPIO12);	/* LED on/off */
-		for (i = 0; i < 500000; i++) {	/* Wait a bit. */
-			__asm__("nop");
-		}
+		delay_cycles(500000);	/* Wait a bit. */
 	}
 
 	return 0;

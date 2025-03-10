@@ -34,6 +34,7 @@ Original comment by Aleksander :
 
 #include "fonts.h"
 
+#define SSD1306_I2C_IFACE       I2C1
 // I2c address
 #ifndef SSD1306_I2C_ADDR
 #define SSD1306_I2C_ADDR        0x3C
@@ -78,8 +79,8 @@ typedef struct {
 //  Function definitions
 //
 
-uint8_t ssd1306_Init(uint32_t hi2c);
-void ssd1306_UpdateScreen(uint32_t hi2c);
+uint8_t ssd1306_Init(void);
+void ssd1306_UpdateScreen(void);
 void ssd1306_Fill(SSD1306_COLOR color);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
@@ -100,12 +101,12 @@ void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8
  * @note Contrast increases as the value increases.
  * @note RESET = 7Fh.
  */
-void ssd1306_SetContrast(uint32_t hi2c,const uint8_t value);
+void ssd1306_SetContrast(const uint8_t value);
 /**
  * @brief Set Display ON/OFF.
  * @param[in] on 0 for OFF, any for ON.
  */
-void ssd1306_SetDisplayOn(uint32_t hi2c,const uint8_t on);
+void ssd1306_SetDisplayOn(const uint8_t on);
 /**
  * @brief Reads DisplayOn state.
  * @return  0: OFF.
