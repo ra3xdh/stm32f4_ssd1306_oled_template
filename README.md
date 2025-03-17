@@ -12,8 +12,8 @@ Hardware list:
 ~~~
 PB6 --> SCL
 PB7 --> SDA
-VCC --> 3.3V
-VDD --> GND
+VDD --> 3.3V
+VSS --> GND
 ~~~
 
 # Software dependencies
